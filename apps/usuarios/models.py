@@ -66,14 +66,14 @@ class TipoDocumento(InformacionBase):
         verbose_name_plural = "TiposDocumentos"
     
 
-def get_default_tipo_de_cuenta():
-    try:
-        return TipoDeCuenta.objects.get(id=1)
-    except TipoDeCuenta.DoesNotExist:
-        return None
+# def get_default_tipo_de_cuenta():
+#     try:
+#         return TipoDeCuenta.objects.get(id=1)
+#     except TipoDeCuenta.DoesNotExist:
+#         return None
 
 class Usuario(AbstractBaseUser, PermissionsMixin):
-    tipo_de_cuenta = models.ForeignKey(TipoDeCuenta, on_delete=models.SET_NULL, null=True, blank=True, default=get_default_tipo_de_cuenta)
+    tipo_de_cuenta = models.ForeignKey(TipoDeCuenta, on_delete=models.SET_NULL, null=True, blank=True)
     tipo_documento = models.ForeignKey(TipoDocumento, on_delete=models.CASCADE, null=True, blank=True)
     identificacion = models.CharField(max_length=100, null=True, blank=True, unique=True) 
     correo = models.EmailField(unique=True)  

@@ -25,3 +25,4 @@ class PersonalizacionUsuario(BaseUserManager):
         if kwargs.get('is_superuser') is not True:
             raise ValueError('El superusuario debe tener is_superuser=True.')  # Lanza un ValueError si is_superuser no es True
         return self.create_user(correo, password, **kwargs)
+    

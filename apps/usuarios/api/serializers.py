@@ -1,8 +1,6 @@
 from apps.usuarios.models import Idioma, Nacionalidad, TipoDeCuenta, TipoDocumento, Usuario
 from rest_framework import serializers
 
-
-
 class IdiomaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Idioma
@@ -34,13 +32,19 @@ class TipoDocumentoSerializer(serializers.ModelSerializer):
 class UsuarioSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     tipo_documento = serializers.PrimaryKeyRelatedField(
-        queryset=TipoDocumento.objects.activos()  
+        queryset=TipoDocumento.objects.activos() ,
+        required=False,
+        allow_null=True 
     )
     idioma = serializers.PrimaryKeyRelatedField(
-        queryset=Idioma.objects.activos()
+        queryset=Idioma.objects.activos(),
+        required=False,
+        allow_null=True
     )
     nacionalidad = serializers.PrimaryKeyRelatedField(
-        queryset=Nacionalidad.objects.activos()
+        queryset=Nacionalidad.objects.activos(),
+        required=False,
+        allow_null=True
     )
     
     class Meta:
@@ -49,3 +53,5 @@ class UsuarioSerializer(serializers.ModelSerializer):
         #campos de solo lectura
         read_only_fields = ('tipo_de_cuenta','fecha_creacion', 'fecha_actualizacion', 'estado', )
         
+    def create(self, validated_data):
+        return Usuario.objects.create_user(**validated_data)

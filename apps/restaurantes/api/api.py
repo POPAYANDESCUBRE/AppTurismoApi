@@ -1,4 +1,4 @@
-from .serializers import MenuSerializer, RestauranteSerializer
+from .serializers import MenuSerializer, RestauranteSerializer, RestauranteMenuSerializer
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 from apps.restaurantes.models import Menu, Restaurante, RestauranteMenu
@@ -77,6 +77,6 @@ class RestauranteViewset(viewsets.ModelViewSet):
         }, status=status.HTTP_204_NO_CONTENT)
 
 class RestauranteMenuViewset(viewsets.ModelViewSet):
-    queryset = Restaurante.objects.all()
-    serializer_class = RestauranteSerializer #como los va a convertir
+    queryset = RestauranteMenu.objects.all()
+    serializer_class = RestauranteMenuSerializer #como los va a convertir
     

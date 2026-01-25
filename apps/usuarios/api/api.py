@@ -40,7 +40,6 @@ class IdiomaViewset(viewsets.ModelViewSet):
             'message': 'El Idioma ha sido Eliminado.'
         }, status=status.HTTP_204_NO_CONTENT)
     
-    
 class NacionalidadViewSet(viewsets.ModelViewSet):
     queryset = Nacionalidad.objects.activos()
     serializer_class = NacionalidadSerializer
@@ -197,6 +196,4 @@ class UsuarioViewSet(viewsets.ModelViewSet):
             'status': 'success',
             'message': 'El usuario ha sido Eliminado.'
         }, status=status.HTTP_204_NO_CONTENT)
-      
 
-    
