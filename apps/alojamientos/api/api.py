@@ -6,7 +6,7 @@ from apps.alojamientos.models import TipoAlojamiento, TipoHabitacion, Alojamient
 
 
 class TipoAlojamientoViewset(viewsets.ModelViewSet):
-    queryset = TipoAlojamiento.objects.activos()
+    queryset = TipoAlojamiento.objects.all()
     serializer_class = TipoAlojamientoSerializer
 
     def create(self, request, *args, **kwargs):
@@ -41,7 +41,7 @@ class TipoAlojamientoViewset(viewsets.ModelViewSet):
 
 
 class TipoHabitacionViewset(viewsets.ModelViewSet):
-    queryset = TipoHabitacion.objects.activos()
+    queryset = TipoHabitacion.objects.all()
     serializer_class = TipoHabitacionSerializer
 
     def create(self, request, *args, **kwargs):
@@ -76,7 +76,7 @@ class TipoHabitacionViewset(viewsets.ModelViewSet):
 
 
 class AlojamientoViewset(viewsets.ModelViewSet):
-    queryset = Alojamiento.objects.activos()
+    queryset = Alojamiento.objects.all()
     serializer_class = AlojamientoSerializer
 
     def create(self, request, *args, **kwargs):

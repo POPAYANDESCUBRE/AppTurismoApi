@@ -1,28 +1,28 @@
+from django.db import transaction
+from django.contrib.contenttypes.models import ContentType
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from django.utils import timezone
 from .serializers import (
     RedSocialSerializer,
-    RestauranteRedSocialSerializer,
-    LugarTuristicoRedSocialSerializer,
-    AlojamientoRedSocialSerializer,
-    EventoRedSocialSerializer,
+    EnlaceRedSocialSerializer,
     ValoracionComentarioSerializer,
+    FavoritoSerializer,
+    MODEL_MAPPING
 )
 from apps.gestiones.models import (
     RedSocial,
-    RestauranteRedSocial,
-    LugarTuristicoRedSocial,
-    AlojamientoRedSocial,
-    EventoRedSocial,
+    EnlaceRedSocial,
     ValoracionComentario,
+    Favorito,
 )
 
 
 class RedSocialViewset(viewsets.ModelViewSet):
-    queryset = RedSocial.objects.activos()
+    queryset = RedSocial.objects.all()
     serializer_class = RedSocialSerializer
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -32,6 +32,7 @@ class RedSocialViewset(viewsets.ModelViewSet):
             "created_data": serializer.data
         }, status=status.HTTP_201_CREATED)
 
+    @transaction.atomic
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
@@ -54,73 +55,30 @@ class RedSocialViewset(viewsets.ModelViewSet):
         }, status=status.HTTP_204_NO_CONTENT)
 
 
-class RestauranteRedSocialViewset(viewsets.ModelViewSet):
-    queryset = RestauranteRedSocial.objects.activos().select_related('restaurante', 'red_social')
-    serializer_class = RestauranteRedSocialSerializer
+class EnlaceRedSocialViewset(viewsets.ModelViewSet):
+    queryset = EnlaceRedSocial.objects.all().select_related('red_social', 'content_type')
+    serializer_class = EnlaceRedSocialSerializer
 
     def get_queryset(self):
         qs = super().get_queryset()
-        restaurante_id = self.request.query_params.get('restaurante')
-        if restaurante_id:
-            qs = qs.filter(restaurante_id=restaurante_id)
+        tipo = self.request.query_params.get('tipo_entidad')
+        id_ent = self.request.query_params.get('id_entidad')
+        
+        if tipo in MODEL_MAPPING:
+            ct = ContentType.objects.get_for_model(MODEL_MAPPING[tipo])
+            qs = qs.filter(content_type=ct)
+        if id_ent:
+            qs = qs.filter(object_id=id_ent)
+            
         return qs
 
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.estado = False
-        instance.eliminado_en = timezone.now()
-        instance.save()
-        return Response({'status': 'success', 'message': 'Eliminado.'}, status=status.HTTP_204_NO_CONTENT)
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
-
-class LugarTuristicoRedSocialViewset(viewsets.ModelViewSet):
-    queryset = LugarTuristicoRedSocial.objects.activos().select_related('lugar_turistico', 'red_social')
-    serializer_class = LugarTuristicoRedSocialSerializer
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        lugar_id = self.request.query_params.get('lugar_turistico')
-        if lugar_id:
-            qs = qs.filter(lugar_turistico_id=lugar_id)
-        return qs
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.estado = False
-        instance.eliminado_en = timezone.now()
-        instance.save()
-        return Response({'status': 'success', 'message': 'Eliminado.'}, status=status.HTTP_204_NO_CONTENT)
-
-
-class AlojamientoRedSocialViewset(viewsets.ModelViewSet):
-    queryset = AlojamientoRedSocial.objects.activos().select_related('alojamiento', 'red_social')
-    serializer_class = AlojamientoRedSocialSerializer
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        alojamiento_id = self.request.query_params.get('alojamiento')
-        if alojamiento_id:
-            qs = qs.filter(alojamiento_id=alojamiento_id)
-        return qs
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.estado = False
-        instance.eliminado_en = timezone.now()
-        instance.save()
-        return Response({'status': 'success', 'message': 'Eliminado.'}, status=status.HTTP_204_NO_CONTENT)
-
-
-class EventoRedSocialViewset(viewsets.ModelViewSet):
-    queryset = EventoRedSocial.objects.activos().select_related('evento', 'red_social')
-    serializer_class = EventoRedSocialSerializer
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        evento_id = self.request.query_params.get('evento')
-        if evento_id:
-            qs = qs.filter(evento_id=evento_id)
-        return qs
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -131,19 +89,23 @@ class EventoRedSocialViewset(viewsets.ModelViewSet):
 
 
 class ValoracionComentarioViewset(viewsets.ModelViewSet):
-    queryset = ValoracionComentario.objects.activos().select_related('usuario')
+    queryset = ValoracionComentario.objects.all().select_related('usuario', 'content_type')
     serializer_class = ValoracionComentarioSerializer
 
     def get_queryset(self):
         qs = super().get_queryset()
         tipo = self.request.query_params.get('tipo_entidad')
         id_ent = self.request.query_params.get('id_entidad')
-        if tipo:
-            qs = qs.filter(tipo_entidad=tipo)
+        
+        if tipo in MODEL_MAPPING:
+            ct = ContentType.objects.get_for_model(MODEL_MAPPING[tipo])
+            qs = qs.filter(content_type=ct)
         if id_ent:
-            qs = qs.filter(id_entidad=id_ent)
+            qs = qs.filter(object_id=id_ent)
+            
         return qs
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -153,6 +115,7 @@ class ValoracionComentarioViewset(viewsets.ModelViewSet):
             "created_data": serializer.data
         }, status=status.HTTP_201_CREATED)
 
+    @transaction.atomic
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
         instance = self.get_object()
@@ -173,3 +136,26 @@ class ValoracionComentarioViewset(viewsets.ModelViewSet):
             'status': 'success',
             'message': 'La valoración ha sido Eliminada.'
         }, status=status.HTTP_204_NO_CONTENT)
+
+
+class FavoritoViewset(viewsets.ModelViewSet):
+    queryset = Favorito.objects.all().select_related('usuario', 'content_type')
+    serializer_class = FavoritoSerializer
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        usuario_id = self.request.query_params.get('usuario')
+        if usuario_id:
+            qs = qs.filter(usuario_id=usuario_id)
+        return qs
+
+    @transaction.atomic
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.estado = False
+        instance.eliminado_en = timezone.now()
+        instance.save()
+        return Response({'status': 'success', 'message': 'Favorito eliminado.'}, status=status.HTTP_204_NO_CONTENT)

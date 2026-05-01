@@ -6,7 +6,7 @@ from .serializers import LugarTuristicoSerializer
 
 
 class LugarTuristicoViewset(viewsets.ModelViewSet):
-    queryset = LugarTuristico.objects.activos()
+    queryset = LugarTuristico.objects.all()
     serializer_class = LugarTuristicoSerializer
 
     def create(self, request, *args, **kwargs):

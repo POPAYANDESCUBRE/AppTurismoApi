@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
 from apps.usuarios.models import InformacionBase
 
 
@@ -41,6 +42,10 @@ class Alojamiento(InformacionBase):
     capacidad_personas = models.PositiveIntegerField(null=True, blank=True)
     telefono = models.CharField(max_length=20, blank=True, default='')
     sitio_web = models.URLField(blank=True, default='')
+
+    # Relaciones genéricas (Inversas)
+    redes_sociales = GenericRelation('gestiones.EnlaceRedSocial')
+    valoraciones = GenericRelation('gestiones.ValoracionComentario')
 
     def __str__(self):
         return self.nombre

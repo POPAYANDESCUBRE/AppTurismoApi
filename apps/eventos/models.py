@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
 from apps.usuarios.models import InformacionBase
 
 
@@ -29,6 +30,10 @@ class Evento(InformacionBase):
     precio = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     es_gratuito = models.BooleanField(default=False)
     cupo_maximo = models.PositiveIntegerField(null=True, blank=True)
+
+    # Relaciones genéricas (Inversas)
+    redes_sociales = GenericRelation('gestiones.EnlaceRedSocial')
+    valoraciones = GenericRelation('gestiones.ValoracionComentario')
 
     def __str__(self):
         return self.nombre

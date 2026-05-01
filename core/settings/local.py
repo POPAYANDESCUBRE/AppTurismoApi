@@ -6,12 +6,12 @@ ALLOWED_HOSTS = ['*']
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'popayandescubre',
         'USER': 'root',
         'PASSWORD': '12345',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'HOST': '192.168.1.120',
+        'PORT': '5432',
     }
 }
 
