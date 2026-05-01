@@ -6,7 +6,7 @@ from apps.restaurantes.models import CategoriaMenu, Restaurante, Plato
 
 
 class CategoriaMenuViewset(viewsets.ModelViewSet):
-    queryset = CategoriaMenu.objects.activos()
+    queryset = CategoriaMenu.objects.all()
     serializer_class = CategoriaMenuSerializer
 
     def create(self, request, *args, **kwargs):
@@ -41,7 +41,7 @@ class CategoriaMenuViewset(viewsets.ModelViewSet):
 
 
 class RestauranteViewset(viewsets.ModelViewSet):
-    queryset = Restaurante.objects.activos()
+    queryset = Restaurante.objects.all()
     serializer_class = RestauranteSerializer
 
     def create(self, request, *args, **kwargs):
@@ -76,7 +76,7 @@ class RestauranteViewset(viewsets.ModelViewSet):
 
 
 class PlatoViewset(viewsets.ModelViewSet):
-    queryset = Plato.objects.activos().select_related('restaurante', 'categoria')
+    queryset = Plato.objects.all().select_related('restaurante', 'categoria')
     serializer_class = PlatoSerializer
 
     def get_queryset(self):

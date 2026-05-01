@@ -7,7 +7,7 @@ from .serializers import IdiomaSerializer, NacionalidadSerializer, TipoDeCuentaS
 
 
 class IdiomaViewset(viewsets.ModelViewSet):
-    queryset = Idioma.objects.activos()
+    queryset = Idioma.objects.all()
     serializer_class = IdiomaSerializer
 
     def create(self, request, *args, **kwargs):
@@ -42,7 +42,7 @@ class IdiomaViewset(viewsets.ModelViewSet):
 
 
 class NacionalidadViewSet(viewsets.ModelViewSet):
-    queryset = Nacionalidad.objects.activos()
+    queryset = Nacionalidad.objects.all()
     serializer_class = NacionalidadSerializer
 
     def create(self, request, *args, **kwargs):
@@ -77,7 +77,7 @@ class NacionalidadViewSet(viewsets.ModelViewSet):
 
 
 class TipoDeCuentaViewSet(viewsets.ModelViewSet):
-    queryset = TipoDeCuenta.objects.activos()
+    queryset = TipoDeCuenta.objects.all()
     serializer_class = TipoDeCuentaSerializer
 
     def create(self, request, *args, **kwargs):
@@ -112,7 +112,7 @@ class TipoDeCuentaViewSet(viewsets.ModelViewSet):
 
 
 class TipoDocumentoViewSet(viewsets.ModelViewSet):
-    queryset = TipoDocumento.objects.activos()
+    queryset = TipoDocumento.objects.all()
     serializer_class = TipoDocumentoSerializer
 
     def create(self, request, *args, **kwargs):
@@ -185,7 +185,20 @@ class UsuarioViewSet(viewsets.ModelViewSet):
         instance.is_active = False
         instance.eliminado_en = timezone.now()
         instance.save()
-        return Response({
-            'status': 'success',
-            'message': 'El usuario ha sido Eliminado.'
-        }, status=status.HTTP_204_NO_CONTENT)
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            refresh_token = request.data.get("refresh")
+            if not refresh_token:
+                return Response({"error": "Se requiere el token de actualización (refresh)."}, status=status.HTTP_400_BAD_REQUEST)
+            
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response({"message": "Sesión cerrada correctamente."}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": "Token inválido o ya blacklisted."}, status=status.HTTP_400_BAD_REQUEST)

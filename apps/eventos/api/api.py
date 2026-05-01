@@ -6,7 +6,7 @@ from apps.eventos.models import TipoEvento, Evento
 
 
 class TipoEventoViewset(viewsets.ModelViewSet):
-    queryset = TipoEvento.objects.activos()
+    queryset = TipoEvento.objects.all()
     serializer_class = TipoEventoSerializer
 
     def create(self, request, *args, **kwargs):
@@ -41,7 +41,7 @@ class TipoEventoViewset(viewsets.ModelViewSet):
 
 
 class EventoViewset(viewsets.ModelViewSet):
-    queryset = Evento.objects.activos()
+    queryset = Evento.objects.all()
     serializer_class = EventoSerializer
 
     def create(self, request, *args, **kwargs):

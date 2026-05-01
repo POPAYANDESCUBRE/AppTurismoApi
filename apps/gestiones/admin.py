@@ -1,16 +1,12 @@
 from django.contrib import admin
 from apps.gestiones.models import (
     RedSocial,
-    RestauranteRedSocial,
-    LugarTuristicoRedSocial,
-    AlojamientoRedSocial,
-    EventoRedSocial,
+    EnlaceRedSocial,
     ValoracionComentario,
+    Favorito,
 )
 
 admin.site.register(RedSocial)
-admin.site.register(RestauranteRedSocial)
-admin.site.register(LugarTuristicoRedSocial)
-admin.site.register(AlojamientoRedSocial)
-admin.site.register(EventoRedSocial)
+admin.site.register(EnlaceRedSocial)
 admin.site.register(ValoracionComentario)
+admin.site.register(Favorito)
