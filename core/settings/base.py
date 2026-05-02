@@ -158,3 +158,8 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 
 CORS_ALLOW_HEADERS = ['content-type', 'authorization', 'x-csrftoken']
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://appturismo-backend-414542781310.us-central1.run.app",
+]
+
