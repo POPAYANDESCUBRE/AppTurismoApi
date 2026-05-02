@@ -74,8 +74,11 @@ The project implements a **State-of-the-art JWT Authentication** flow:
     ```bash
     pip install -r requirements.txt
     ```
-4.  **Configure Environment Variables**:
-    Create a `.env` file based on the settings in `core/settings/`.
+4.  **Configure GCP Credentials**:
+    For local development, you need the service account key to access Secret Manager:
+    ```bash
+    export GOOGLE_APPLICATION_CREDENTIALS="./appturismo-key.json"
+    ```
 5.  **Run Migrations**:
     ```bash
     python manage.py migrate
