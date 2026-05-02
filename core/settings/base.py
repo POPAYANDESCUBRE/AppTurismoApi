@@ -10,8 +10,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
+from .gcp_secrets import get_secrets_from_gcp
+
+# Fetch all secrets from Google Cloud Secret Manager
+gcp_secrets_dict = get_secrets_from_gcp()
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--6xi_ya*ijs(faaoe$9_$ayip7c99h=90)3=bq@y6@h*d^x8s%'
+SECRET_KEY = gcp_secrets_dict.get('DJANGO_SECRET_KEY', 'django-insecure-fallback-do-not-use-in-prod')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 

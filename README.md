@@ -87,6 +87,47 @@ The project implements a **State-of-the-art JWT Authentication** flow:
 
 ---
 
+## 🚀 Deployment (Google Cloud Platform)
+
+This project is optimized for deployment to **Google Cloud Run** using a serverless architecture and **GCP Secret Manager** for sensitive configuration.
+
+### 1. Prerequisites
+- [Google Cloud SDK](https://cloud.google.com/sdk/docs/install) installed.
+- Authenticated with your GCP account:
+  ```bash
+  gcloud auth login
+  gcloud config set project popayan-descubre
+  ```
+
+### 2. Secret Manager Integration
+The application fetches its `SECRET_KEY` and `DATABASES` configuration from a secret named `appturismo-django-secrets`. 
+
+**For local development:**
+1. Download the Service Account JSON key (`appturismo-key.json`).
+2. Set the environment variable:
+   ```bash
+   export GOOGLE_APPLICATION_CREDENTIALS="/path/to/appturismo-key.json"
+   ```
+
+### 3. Deploying to Cloud Run
+To build a new revision and deploy it without requiring Docker installed locally:
+
+```bash
+gcloud run deploy appturismo-backend \
+    --source . \
+    --region us-central1 \
+    --service-account appturismo-backend@popayan-descubre.iam.gserviceaccount.com \
+    --allow-unauthenticated
+```
+
+**What this does:**
+*   **Cloud Build**: Compiles the `Dockerfile` on Google's infrastructure.
+*   **Artifact Registry**: Stores the resulting container image.
+*   **Cloud Run**: Spins up the new revision and handles traffic routing.
+*   **IAM**: Attaches the Service Account so the container can natively read secrets.
+
+---
+
 ## 🛡️ Best Practices Implemented
 *   **Audit Trails**: All models inherit from `InformacionBase`, providing automatic `fecha_creacion` and `fecha_actualizacion` timestamps.
 *   **Soft Deletion**: Prepared for logical deletion to prevent data loss.
