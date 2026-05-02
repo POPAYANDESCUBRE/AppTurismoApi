@@ -82,7 +82,7 @@ The project implements a **State-of-the-art JWT Authentication** flow:
     ```
 6.  **Start the Server**:
     ```bash
-    python manage.py run server
+    python manage.py runserver
     ```
 
 ---
