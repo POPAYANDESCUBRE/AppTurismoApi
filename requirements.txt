@@ -18,3 +18,4 @@ urllib3==2.0.3
 yarg==0.1.9
 google-cloud-secret-manager
 gunicorn
+drf-spectacular

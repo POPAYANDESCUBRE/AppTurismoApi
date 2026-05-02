@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'apps.restaurantes',
     'apps.usuarios',
     'apps.gestiones', 
+    'drf_spectacular',
 ]
 
 
@@ -130,6 +131,14 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated', 
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'AppTurismo API',
+    'DESCRIPTION': 'API documentation for the Descubre Popayán project.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
 
 SIMPLE_JWT = {
