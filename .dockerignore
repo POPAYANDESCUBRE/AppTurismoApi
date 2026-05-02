@@ -1,0 +1,16 @@
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+db.sqlite3
+.git/
+.gitignore
+.env
+.vscode/
+.idea/
+appturismo-key.json
+secrets.json
+docs/

@@ -36,3 +36,7 @@ Thumbs.db
 # Archivos accidentales de curl
 -H
 -d
+
+# Secrets & Keys
+appturismo-key.json
+secrets.json
