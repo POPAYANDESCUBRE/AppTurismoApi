@@ -6,19 +6,20 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('apps.restaurantes.api.urls')),
-    path('', include('apps.usuarios.api.urls')),
-    path('', include('apps.lugaresturisticos.api.urls')),
-    path('', include('apps.gestiones.api.urls')),
-    path('', include('apps.eventos.api.urls')),
-    path('', include('apps.alojamientos.api.urls')),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'), 
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    
+    # API v1 routes
+    path('api/v1/', include('apps.usuarios.api.urls')),
+    path('api/v1/', include('apps.lugaresturisticos.api.urls')),
+    path('api/v1/', include('apps.restaurantes.api.urls')),
+    path('api/v1/', include('apps.alojamientos.api.urls')),
+    path('api/v1/', include('apps.eventos.api.urls')),
+    path('api/v1/', include('apps.noticias.api.urls')),
+    path('api/v1/', include('apps.gestiones.api.urls')),
+    path('api/v1/', include('apps.mascota.api.urls')),
+    path('api/v1/', include('apps.historial.api.urls')),
+
     # API Documentation
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/docs/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-    # AÑADE ESTA LÍNEA CLAVE para el Restablecimiento de Contraseña
-    # La URL base será /api/auth/password_reset/
-    path('api/auth/', include('django.contrib.auth.urls'))
+    path('api/docs/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]

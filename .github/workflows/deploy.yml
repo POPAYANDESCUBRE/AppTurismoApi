@@ -1,0 +1,42 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build -t appturismo-backend:latest .
+
+      - name: Stop and remove old container
+        run: |
+          docker stop tourism-api || true
+          docker rm tourism-api || true
+
+      - name: Remove old image (dangling)
+        run: |
+          docker image prune -f
+
+      - name: Start new container
+        run: |
+          docker run -d \
+            --name tourism-api \
+            -p 8080:8080 \
+            --restart always \
+            -e GOOGLE_APPLICATION_CREDENTIALS=/app/secrets/appturismo-key.json \
+            -v /home/danilo/.gcp/appturismo-key.json:/app/secrets/appturismo-key.json \
+            appturismo-backend:latest
+
+      - name: Verify container is running
+        run: |
+          sleep 5
+          docker ps --filter name=tourism-api --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"

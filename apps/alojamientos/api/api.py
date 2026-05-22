@@ -1,110 +1,71 @@
-from .serializers import TipoAlojamientoSerializer, AlojamientoSerializer, TipoHabitacionSerializer
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, permissions
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.utils import timezone
-from apps.alojamientos.models import TipoAlojamiento, TipoHabitacion, Alojamiento
+from apps.alojamientos.models import Alojamiento, TipoAlojamiento, TipoHabitacion
+from apps.gestiones.models import ValoracionComentario
+from .serializers import AlojamientoSerializer, TipoAlojamientoSerializer, TipoHabitacionSerializer
+from apps.gestiones.api.serializers import ValoracionComentarioSerializer
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django.contrib.contenttypes.models import ContentType
 
 
-class TipoAlojamientoViewset(viewsets.ModelViewSet):
+class TipoAlojamientoViewset(viewsets.ReadOnlyModelViewSet):
     queryset = TipoAlojamiento.objects.all()
     serializer_class = TipoAlojamientoSerializer
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return Response({
-            "message": "Tipo de Alojamiento creado.",
-            "created_data": serializer.data
-        }, status=status.HTTP_201_CREATED)
 
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response({
-            "message": "Los datos han sido actualizados",
-            "updated_data": serializer.data
-        }, status=status.HTTP_200_OK)
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.estado = False
-        instance.eliminado_en = timezone.now()
-        instance.save()
-        return Response({
-            'status': 'success',
-            'message': 'Tipo de alojamiento ha sido Eliminado.'
-        }, status=status.HTTP_204_NO_CONTENT)
-
-
-class TipoHabitacionViewset(viewsets.ModelViewSet):
+class TipoHabitacionViewset(viewsets.ReadOnlyModelViewSet):
     queryset = TipoHabitacion.objects.all()
     serializer_class = TipoHabitacionSerializer
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return Response({
-            "message": "Tipo de habitacion creado.",
-            "created_data": serializer.data
-        }, status=status.HTTP_201_CREATED)
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response({
-            "message": "Los datos han sido actualizados",
-            "updated_data": serializer.data
-        }, status=status.HTTP_200_OK)
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.estado = False
-        instance.eliminado_en = timezone.now()
-        instance.save()
-        return Response({
-            'status': 'success',
-            'message': 'Tipo de habitacion ha sido Eliminado.'
-        }, status=status.HTTP_204_NO_CONTENT)
-
 
 class AlojamientoViewset(viewsets.ModelViewSet):
-    queryset = Alojamiento.objects.all()
+    queryset = Alojamiento.objects.filter(estado=True)
     serializer_class = AlojamientoSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_fields = ['tipo_alojamiento', 'tipo_habitacion', 'es_destacado']
+    search_fields = ['nombre', 'descripcion']
+    ordering_fields = ['precio', 'rating_avg', 'nombre']
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return Response({
-            "message": "Alojamiento creado.",
-            "created_data": serializer.data
-        }, status=status.HTTP_201_CREATED)
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve', 'valoraciones']:
+            permission_classes = [permissions.IsAuthenticated]
+        elif self.action == 'agregar_valoracion':
+            permission_classes = [permissions.IsAuthenticated]
+        else:
+            permission_classes = [permissions.IsAdminUser]
+        return [permission() for permission in permission_classes]
 
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response({
-            "message": "Los datos han sido actualizados",
-            "updated_data": serializer.data
-        }, status=status.HTTP_200_OK)
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
+    def perform_destroy(self, instance):
         instance.estado = False
         instance.eliminado_en = timezone.now()
         instance.save()
-        return Response({
-            'status': 'success',
-            'message': 'Alojamiento ha sido Eliminado.'
-        }, status=status.HTTP_204_NO_CONTENT)
+
+    @action(detail=True, methods=['get', 'post'])
+    def valoraciones(self, request, pk=None):
+        alojamiento = self.get_object()
+        ct = ContentType.objects.get_for_model(Alojamiento)
+        
+        if request.method == 'GET':
+            valoraciones = ValoracionComentario.objects.filter(content_type=ct, object_id=alojamiento.id, estado=True)
+            page = self.paginate_queryset(valoraciones)
+            if page is not None:
+                serializer = ValoracionComentarioSerializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+            serializer = ValoracionComentarioSerializer(valoraciones, many=True)
+            return Response(serializer.data)
+            
+        elif request.method == 'POST':
+            if ValoracionComentario.objects.filter(content_type=ct, object_id=alojamiento.id, usuario=request.user, estado=True).exists():
+                return Response({"detail": "Ya has valorado este alojamiento."}, status=status.HTTP_400_BAD_REQUEST)
+                
+            data = request.data.copy()
+            data['tipo_entidad'] = 'alojamiento'
+            data['id_entidad'] = alojamiento.id
+            
+            serializer = ValoracionComentarioSerializer(data=data, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save(usuario=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)

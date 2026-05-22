@@ -1,0 +1,4549 @@
+openapi: 3.0.3
+info:
+  title: AppTurismo API
+  version: 1.0.0
+  description: API documentation for the Descubre Popayán project.
+paths:
+  /api/v1/alojamientos/:
+    get:
+      operationId: v1_alojamientos_list
+      parameters:
+      - in: query
+        name: es_destacado
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: tipo_alojamiento
+        schema:
+          type: integer
+      - in: query
+        name: tipo_habitacion
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAlojamientoList'
+          description: ''
+    post:
+      operationId: v1_alojamientos_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Alojamiento'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Alojamiento'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Alojamiento'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alojamiento'
+          description: ''
+  /api/v1/alojamientos/{id}/:
+    get:
+      operationId: v1_alojamientos_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Alojamiento.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alojamiento'
+          description: ''
+    put:
+      operationId: v1_alojamientos_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Alojamiento.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Alojamiento'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Alojamiento'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Alojamiento'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alojamiento'
+          description: ''
+    patch:
+      operationId: v1_alojamientos_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Alojamiento.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAlojamiento'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAlojamiento'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAlojamiento'
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alojamiento'
+          description: ''
+    delete:
+      operationId: v1_alojamientos_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Alojamiento.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/alojamientos/{id}/valoraciones/:
+    get:
+      operationId: v1_alojamientos_valoraciones_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Alojamiento.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alojamiento'
+          description: ''
+    post:
+      operationId: v1_alojamientos_valoraciones_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Alojamiento.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Alojamiento'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Alojamiento'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Alojamiento'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alojamiento'
+          description: ''
+  /api/v1/alojamientos/tipos/:
+    get:
+      operationId: v1_alojamientos_tipos_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTipoAlojamientoList'
+          description: ''
+  /api/v1/alojamientos/tipos-habitacion/:
+    get:
+      operationId: v1_alojamientos_tipos_habitacion_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTipoHabitacionList'
+          description: ''
+  /api/v1/alojamientos/tipos-habitacion/{id}/:
+    get:
+      operationId: v1_alojamientos_tipos_habitacion_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this TipoHabitacion.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TipoHabitacion'
+          description: ''
+  /api/v1/alojamientos/tipos/{id}/:
+    get:
+      operationId: v1_alojamientos_tipos_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this TipoAlojamiento.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TipoAlojamiento'
+          description: ''
+  /api/v1/auth/login/:
+    post:
+      operationId: v1_auth_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenObtainPair'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenObtainPair'
+          description: ''
+  /api/v1/auth/logout/:
+    post:
+      operationId: v1_auth_logout_create
+      description: |-
+        Takes a token and blacklists it. Must be used with the
+        `rest_framework_simplejwt.token_blacklist` app installed.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenBlacklist'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenBlacklist'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenBlacklist'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenBlacklist'
+          description: ''
+  /api/v1/auth/registro/:
+    post:
+      operationId: v1_auth_registro_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: ''
+  /api/v1/auth/token/refresh/:
+    post:
+      operationId: v1_auth_token_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefresh'
+        required: true
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+  /api/v1/buscar/:
+    get:
+      operationId: v1_buscar_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/configuracion/:
+    get:
+      operationId: v1_configuracion_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/enlaces-redes-sociales/:
+    get:
+      operationId: v1_enlaces_redes_sociales_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEnlaceRedSocialList'
+          description: ''
+    post:
+      operationId: v1_enlaces_redes_sociales_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnlaceRedSocial'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EnlaceRedSocial'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EnlaceRedSocial'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnlaceRedSocial'
+          description: ''
+  /api/v1/enlaces-redes-sociales/{id}/:
+    get:
+      operationId: v1_enlaces_redes_sociales_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Enlace Red Social.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnlaceRedSocial'
+          description: ''
+    put:
+      operationId: v1_enlaces_redes_sociales_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Enlace Red Social.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnlaceRedSocial'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/EnlaceRedSocial'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/EnlaceRedSocial'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnlaceRedSocial'
+          description: ''
+    patch:
+      operationId: v1_enlaces_redes_sociales_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Enlace Red Social.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEnlaceRedSocial'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEnlaceRedSocial'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEnlaceRedSocial'
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EnlaceRedSocial'
+          description: ''
+    delete:
+      operationId: v1_enlaces_redes_sociales_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Enlace Red Social.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/eventos/:
+    get:
+      operationId: v1_eventos_list
+      parameters:
+      - in: query
+        name: es_destacado
+        schema:
+          type: boolean
+      - in: query
+        name: es_gratuito
+        schema:
+          type: boolean
+      - in: query
+        name: fecha_inicio__gte
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: fecha_inicio__lte
+        schema:
+          type: string
+          format: date-time
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: tipo_evento
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedEventoList'
+          description: ''
+    post:
+      operationId: v1_eventos_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Evento'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Evento'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Evento'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evento'
+          description: ''
+  /api/v1/eventos/{id}/:
+    get:
+      operationId: v1_eventos_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Evento.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evento'
+          description: ''
+    put:
+      operationId: v1_eventos_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Evento.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Evento'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Evento'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Evento'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evento'
+          description: ''
+    patch:
+      operationId: v1_eventos_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Evento.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedEvento'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedEvento'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedEvento'
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evento'
+          description: ''
+    delete:
+      operationId: v1_eventos_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Evento.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/eventos/{id}/valoraciones/:
+    get:
+      operationId: v1_eventos_valoraciones_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Evento.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evento'
+          description: ''
+    post:
+      operationId: v1_eventos_valoraciones_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Evento.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Evento'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Evento'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Evento'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Evento'
+          description: ''
+  /api/v1/eventos/tipos/:
+    get:
+      operationId: v1_eventos_tipos_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTipoEventoList'
+          description: ''
+  /api/v1/eventos/tipos/{id}/:
+    get:
+      operationId: v1_eventos_tipos_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this TipoEvento.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TipoEvento'
+          description: ''
+  /api/v1/explorar/:
+    get:
+      operationId: v1_explorar_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/favoritos/:
+    get:
+      operationId: v1_favoritos_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFavoritoList'
+          description: ''
+    post:
+      operationId: v1_favoritos_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Favorito'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Favorito'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Favorito'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favorito'
+          description: ''
+  /api/v1/favoritos/{id}/:
+    get:
+      operationId: v1_favoritos_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favorito'
+          description: ''
+    put:
+      operationId: v1_favoritos_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Favorito'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Favorito'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Favorito'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favorito'
+          description: ''
+    patch:
+      operationId: v1_favoritos_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFavorito'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFavorito'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFavorito'
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Favorito'
+          description: ''
+    delete:
+      operationId: v1_favoritos_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/historial/:
+    get:
+      operationId: v1_historial_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedHistorialNavegacionList'
+          description: ''
+    post:
+      operationId: v1_historial_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HistorialNavegacion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/HistorialNavegacion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/HistorialNavegacion'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HistorialNavegacion'
+          description: ''
+  /api/v1/historial/{id}/:
+    get:
+      operationId: v1_historial_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HistorialNavegacion'
+          description: ''
+    put:
+      operationId: v1_historial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HistorialNavegacion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/HistorialNavegacion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/HistorialNavegacion'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HistorialNavegacion'
+          description: ''
+    patch:
+      operationId: v1_historial_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedHistorialNavegacion'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedHistorialNavegacion'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedHistorialNavegacion'
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HistorialNavegacion'
+          description: ''
+    delete:
+      operationId: v1_historial_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/lugares/:
+    get:
+      operationId: v1_lugares_list
+      parameters:
+      - in: query
+        name: es_destacado
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      - in: query
+        name: tipo_lugar_turistico
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLugarTuristicoList'
+          description: ''
+    post:
+      operationId: v1_lugares_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LugarTuristico'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LugarTuristico'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LugarTuristico'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LugarTuristico'
+          description: ''
+  /api/v1/lugares/{id}/:
+    get:
+      operationId: v1_lugares_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this LugarTuristico.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LugarTuristico'
+          description: ''
+    put:
+      operationId: v1_lugares_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this LugarTuristico.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LugarTuristico'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LugarTuristico'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LugarTuristico'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LugarTuristico'
+          description: ''
+    patch:
+      operationId: v1_lugares_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this LugarTuristico.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLugarTuristico'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLugarTuristico'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLugarTuristico'
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LugarTuristico'
+          description: ''
+    delete:
+      operationId: v1_lugares_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this LugarTuristico.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/lugares/{id}/etiquetas/:
+    get:
+      operationId: v1_lugares_etiquetas_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this LugarTuristico.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LugarTuristico'
+          description: ''
+    post:
+      operationId: v1_lugares_etiquetas_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this LugarTuristico.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LugarTuristico'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LugarTuristico'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LugarTuristico'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LugarTuristico'
+          description: ''
+  /api/v1/lugares/{id}/etiquetas/{tag_id}/:
+    delete:
+      operationId: v1_lugares_etiquetas_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this LugarTuristico.
+        required: true
+      - in: path
+        name: tag_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/lugares/{id}/imagenes/:
+    get:
+      operationId: v1_lugares_imagenes_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this LugarTuristico.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LugarTuristico'
+          description: ''
+    post:
+      operationId: v1_lugares_imagenes_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this LugarTuristico.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LugarTuristico'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LugarTuristico'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LugarTuristico'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LugarTuristico'
+          description: ''
+  /api/v1/lugares/{id}/imagenes/{img_id}/:
+    delete:
+      operationId: v1_lugares_imagenes_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this LugarTuristico.
+        required: true
+      - in: path
+        name: img_id
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/lugares/{id}/valoraciones/:
+    get:
+      operationId: v1_lugares_valoraciones_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this LugarTuristico.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LugarTuristico'
+          description: ''
+    post:
+      operationId: v1_lugares_valoraciones_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this LugarTuristico.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LugarTuristico'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LugarTuristico'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LugarTuristico'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LugarTuristico'
+          description: ''
+  /api/v1/lugares/tipos/:
+    get:
+      operationId: v1_lugares_tipos_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/lugares/tipos/{id}/:
+    get:
+      operationId: v1_lugares_tipos_retrieve_2
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this TipoLugarTuristico.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          description: No response body
+  /api/v1/mapa/pines/:
+    get:
+      operationId: v1_mapa_pines_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/v1/mascota/consejos/:
+    get:
+      operationId: v1_mascota_consejos_list
+      parameters:
+      - in: query
+        name: activo
+        schema:
+          type: boolean
+      - in: query
+        name: idioma
+        schema:
+          type: string
+          enum:
+          - en
+          - es
+        description: |-
+          * `es` - Español
+          * `en` - English
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedConsejoMascotaList'
+          description: ''
+    post:
+      operationId: v1_mascota_consejos_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsejoMascota'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ConsejoMascota'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ConsejoMascota'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsejoMascota'
+          description: ''
+  /api/v1/mascota/consejos/{id}/:
+    get:
+      operationId: v1_mascota_consejos_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Consejo Mascota.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsejoMascota'
+          description: ''
+    put:
+      operationId: v1_mascota_consejos_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Consejo Mascota.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConsejoMascota'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ConsejoMascota'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ConsejoMascota'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsejoMascota'
+          description: ''
+    patch:
+      operationId: v1_mascota_consejos_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Consejo Mascota.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedConsejoMascota'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedConsejoMascota'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedConsejoMascota'
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConsejoMascota'
+          description: ''
+    delete:
+      operationId: v1_mascota_consejos_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Consejo Mascota.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/me/:
+    get:
+      operationId: v1_me_retrieve
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: ''
+    put:
+      operationId: v1_me_update
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: ''
+    patch:
+      operationId: v1_me_partial_update
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUsuario'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUsuario'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUsuario'
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: ''
+    delete:
+      operationId: v1_me_destroy
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/noticias/:
+    get:
+      operationId: v1_noticias_list
+      parameters:
+      - in: query
+        name: categoria
+        schema:
+          type: string
+          enum:
+          - alertas
+          - consejos
+          - cultura
+          - eventos
+        description: |-
+          * `eventos` - Eventos
+          * `alertas` - Alertas
+          * `consejos` - Consejos
+          * `cultura` - Cultura
+      - in: query
+        name: es_destacada
+        schema:
+          type: boolean
+      - in: query
+        name: nivel_alerta
+        schema:
+          type: string
+          nullable: true
+          enum:
+          - advertencia
+          - info
+          - peligro
+        description: |-
+          * `info` - Información
+          * `advertencia` - Advertencia
+          * `peligro` - Peligro
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedNoticiaList'
+          description: ''
+    post:
+      operationId: v1_noticias_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Noticia'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Noticia'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Noticia'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Noticia'
+          description: ''
+  /api/v1/noticias/{id}/:
+    get:
+      operationId: v1_noticias_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Noticia.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Noticia'
+          description: ''
+    put:
+      operationId: v1_noticias_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Noticia.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Noticia'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Noticia'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Noticia'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Noticia'
+          description: ''
+    patch:
+      operationId: v1_noticias_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Noticia.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedNoticia'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedNoticia'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedNoticia'
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Noticia'
+          description: ''
+    delete:
+      operationId: v1_noticias_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Noticia.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/redes-sociales/:
+    get:
+      operationId: v1_redes_sociales_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRedSocialList'
+          description: ''
+  /api/v1/redes-sociales/{id}/:
+    get:
+      operationId: v1_redes_sociales_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Red Social.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RedSocial'
+          description: ''
+  /api/v1/restaurantes/:
+    get:
+      operationId: v1_restaurantes_list
+      parameters:
+      - in: query
+        name: es_destacado
+        schema:
+          type: boolean
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRestauranteList'
+          description: ''
+    post:
+      operationId: v1_restaurantes_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurante'
+          description: ''
+  /api/v1/restaurantes/{id}/:
+    get:
+      operationId: v1_restaurantes_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Restaurante.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurante'
+          description: ''
+    put:
+      operationId: v1_restaurantes_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Restaurante.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurante'
+          description: ''
+    patch:
+      operationId: v1_restaurantes_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Restaurante.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRestaurante'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRestaurante'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRestaurante'
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurante'
+          description: ''
+    delete:
+      operationId: v1_restaurantes_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Restaurante.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/restaurantes/{id}/platos/:
+    get:
+      operationId: v1_restaurantes_platos_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Restaurante.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurante'
+          description: ''
+    post:
+      operationId: v1_restaurantes_platos_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Restaurante.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurante'
+          description: ''
+  /api/v1/restaurantes/{id}/valoraciones/:
+    get:
+      operationId: v1_restaurantes_valoraciones_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Restaurante.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurante'
+          description: ''
+    post:
+      operationId: v1_restaurantes_valoraciones_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Restaurante.
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Restaurante'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Restaurante'
+          description: ''
+  /api/v1/restaurantes/categorias-menu/:
+    get:
+      operationId: v1_restaurantes_categorias_menu_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCategoriaMenuList'
+          description: ''
+  /api/v1/restaurantes/categorias-menu/{id}/:
+    get:
+      operationId: v1_restaurantes_categorias_menu_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Categoria Menu.
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoriaMenu'
+          description: ''
+  /api/v1/valoraciones/:
+    get:
+      operationId: v1_valoraciones_list
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: page
+        required: false
+        in: query
+        description: A page number within the paginated result set.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: A search term.
+        schema:
+          type: string
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedValoracionComentarioList'
+          description: ''
+    post:
+      operationId: v1_valoraciones_create
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValoracionComentario'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ValoracionComentario'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ValoracionComentario'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValoracionComentario'
+          description: ''
+  /api/v1/valoraciones/{id}/:
+    get:
+      operationId: v1_valoraciones_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValoracionComentario'
+          description: ''
+    put:
+      operationId: v1_valoraciones_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValoracionComentario'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ValoracionComentario'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ValoracionComentario'
+        required: true
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValoracionComentario'
+          description: ''
+    patch:
+      operationId: v1_valoraciones_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedValoracionComentario'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedValoracionComentario'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedValoracionComentario'
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValoracionComentario'
+          description: ''
+    delete:
+      operationId: v1_valoraciones_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - v1
+      security:
+      - jwtAuth: []
+      - bearerAuth: []
+      responses:
+        '204':
+          description: No response body
+components:
+  schemas:
+    Alojamiento:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nombre:
+          type: string
+          maxLength: 100
+        descripcion:
+          type: string
+        direccion:
+          type: string
+          maxLength: 200
+        latitud:
+          type: number
+          format: double
+        longitud:
+          type: number
+          format: double
+        imagen:
+          type: string
+          format: uri
+          nullable: true
+        hora_apertura:
+          type: string
+          format: time
+          nullable: true
+        hora_cierre:
+          type: string
+          format: time
+          nullable: true
+        tipo_alojamiento:
+          type: integer
+          nullable: true
+        tipo_habitacion:
+          type: integer
+          nullable: true
+        precio:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        capacidad_personas:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        telefono:
+          type: string
+          maxLength: 20
+        sitio_web:
+          type: string
+          format: uri
+          maxLength: 200
+        rating_avg:
+          type: number
+          format: double
+          readOnly: true
+        rating_count:
+          type: integer
+          readOnly: true
+        es_destacado:
+          type: boolean
+        is_favorito:
+          type: string
+          readOnly: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+      required:
+      - descripcion
+      - direccion
+      - estado
+      - fecha_actualizacion
+      - fecha_creacion
+      - id
+      - is_favorito
+      - latitud
+      - longitud
+      - nombre
+      - precio
+      - rating_avg
+      - rating_count
+    BlankEnum:
+      enum:
+      - ''
+    CategoriaEnum:
+      enum:
+      - eventos
+      - alertas
+      - consejos
+      - cultura
+      type: string
+      description: |-
+        * `eventos` - Eventos
+        * `alertas` - Alertas
+        * `consejos` - Consejos
+        * `cultura` - Cultura
+    CategoriaMenu:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nombre:
+          type: string
+          maxLength: 100
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+      required:
+      - estado
+      - fecha_actualizacion
+      - fecha_creacion
+      - id
+      - nombre
+    ConsejoMascota:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        tipo_entidad:
+          allOf:
+          - $ref: '#/components/schemas/TipoEntidadEnum'
+          writeOnly: true
+        id_entidad:
+          type: integer
+          writeOnly: true
+        texto:
+          type: string
+          maxLength: 500
+        idioma:
+          $ref: '#/components/schemas/IdiomaEnum'
+        activo:
+          type: boolean
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+      required:
+      - estado
+      - fecha_actualizacion
+      - fecha_creacion
+      - id
+      - id_entidad
+      - texto
+      - tipo_entidad
+    EnlaceRedSocial:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        red_social:
+          type: integer
+        url_perfil:
+          type: string
+          format: uri
+          maxLength: 200
+        tipo_entidad:
+          allOf:
+          - $ref: '#/components/schemas/TipoEntidadEnum'
+          writeOnly: true
+        id_entidad:
+          type: integer
+          writeOnly: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+      required:
+      - estado
+      - fecha_actualizacion
+      - fecha_creacion
+      - id
+      - id_entidad
+      - red_social
+      - tipo_entidad
+      - url_perfil
+    EtiquetaLugar:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        lugar:
+          type: integer
+        etiqueta:
+          type: string
+          maxLength: 100
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - etiqueta
+      - fecha_creacion
+      - id
+      - lugar
+    Evento:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nombre:
+          type: string
+          maxLength: 100
+        descripcion:
+          type: string
+        direccion:
+          type: string
+          maxLength: 200
+        latitud:
+          type: number
+          format: double
+        longitud:
+          type: number
+          format: double
+        imagen:
+          type: string
+          format: uri
+          nullable: true
+        fecha_inicio:
+          type: string
+          format: date-time
+        fecha_fin:
+          type: string
+          format: date-time
+        hora_apertura:
+          type: string
+          format: time
+          nullable: true
+        hora_cierre:
+          type: string
+          format: time
+          nullable: true
+        tipo_evento:
+          type: integer
+          nullable: true
+        precio:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        es_gratuito:
+          type: boolean
+        cupo_maximo:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        rating_avg:
+          type: number
+          format: double
+          readOnly: true
+        rating_count:
+          type: integer
+          readOnly: true
+        es_destacado:
+          type: boolean
+        is_favorito:
+          type: string
+          readOnly: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+      required:
+      - descripcion
+      - direccion
+      - estado
+      - fecha_actualizacion
+      - fecha_creacion
+      - fecha_fin
+      - fecha_inicio
+      - id
+      - is_favorito
+      - latitud
+      - longitud
+      - nombre
+      - rating_avg
+      - rating_count
+    Favorito:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        usuario:
+          type: integer
+          readOnly: true
+        tipo_entidad:
+          allOf:
+          - $ref: '#/components/schemas/TipoEntidadEnum'
+          writeOnly: true
+        id_entidad:
+          type: integer
+          writeOnly: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+      required:
+      - estado
+      - fecha_actualizacion
+      - fecha_creacion
+      - id
+      - id_entidad
+      - tipo_entidad
+      - usuario
+    HistorialNavegacion:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        usuario:
+          type: integer
+          readOnly: true
+        tipo_entidad:
+          allOf:
+          - $ref: '#/components/schemas/TipoEntidadEnum'
+          writeOnly: true
+        id_entidad:
+          type: integer
+          writeOnly: true
+        visto_en:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+      required:
+      - estado
+      - fecha_actualizacion
+      - fecha_creacion
+      - id
+      - id_entidad
+      - tipo_entidad
+      - usuario
+      - visto_en
+    IdiomaEnum:
+      enum:
+      - es
+      - en
+      type: string
+      description: |-
+        * `es` - Español
+        * `en` - English
+    ImagenLugar:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        lugar:
+          type: integer
+        url:
+          type: string
+          format: uri
+          maxLength: 200
+        orden:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - fecha_creacion
+      - id
+      - lugar
+      - url
+    LugarTuristico:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nombre:
+          type: string
+          maxLength: 100
+        descripcion:
+          type: string
+        direccion:
+          type: string
+          maxLength: 200
+        latitud:
+          type: number
+          format: double
+        longitud:
+          type: number
+          format: double
+        imagen:
+          type: string
+          format: uri
+          nullable: true
+        hora_apertura:
+          type: string
+          format: time
+          nullable: true
+        hora_cierre:
+          type: string
+          format: time
+          nullable: true
+        precio_entrada:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        telefono:
+          type: string
+          maxLength: 20
+        sitio_web:
+          type: string
+          format: uri
+          maxLength: 200
+        rating_avg:
+          type: number
+          format: double
+          readOnly: true
+        rating_count:
+          type: integer
+          readOnly: true
+        es_destacado:
+          type: boolean
+        tipo_lugar_turistico:
+          type: integer
+          nullable: true
+        imagenes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImagenLugar'
+          readOnly: true
+        etiquetas:
+          type: array
+          items:
+            $ref: '#/components/schemas/EtiquetaLugar'
+          readOnly: true
+        is_favorito:
+          type: string
+          readOnly: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+      required:
+      - descripcion
+      - direccion
+      - estado
+      - etiquetas
+      - fecha_actualizacion
+      - fecha_creacion
+      - id
+      - imagenes
+      - is_favorito
+      - latitud
+      - longitud
+      - nombre
+      - rating_avg
+      - rating_count
+    NivelAlertaEnum:
+      enum:
+      - info
+      - advertencia
+      - peligro
+      type: string
+      description: |-
+        * `info` - Información
+        * `advertencia` - Advertencia
+        * `peligro` - Peligro
+    Noticia:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        titulo:
+          type: string
+          maxLength: 200
+        extracto:
+          type: string
+        cuerpo:
+          type: string
+        categoria:
+          $ref: '#/components/schemas/CategoriaEnum'
+        imagen:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        nivel_alerta:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/NivelAlertaEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        es_destacada:
+          type: boolean
+        publicado_en:
+          type: string
+          format: date-time
+          nullable: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+      required:
+      - categoria
+      - cuerpo
+      - estado
+      - fecha_actualizacion
+      - fecha_creacion
+      - id
+      - titulo
+    NullEnum:
+      enum:
+      - null
+    PaginatedAlojamientoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Alojamiento'
+    PaginatedCategoriaMenuList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CategoriaMenu'
+    PaginatedConsejoMascotaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConsejoMascota'
+    PaginatedEnlaceRedSocialList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnlaceRedSocial'
+    PaginatedEventoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Evento'
+    PaginatedFavoritoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Favorito'
+    PaginatedHistorialNavegacionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistorialNavegacion'
+    PaginatedLugarTuristicoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LugarTuristico'
+    PaginatedNoticiaList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Noticia'
+    PaginatedRedSocialList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RedSocial'
+    PaginatedRestauranteList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Restaurante'
+    PaginatedTipoAlojamientoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TipoAlojamiento'
+    PaginatedTipoEventoList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TipoEvento'
+    PaginatedTipoHabitacionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TipoHabitacion'
+    PaginatedValoracionComentarioList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValoracionComentario'
+    PatchedAlojamiento:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nombre:
+          type: string
+          maxLength: 100
+        descripcion:
+          type: string
+        direccion:
+          type: string
+          maxLength: 200
+        latitud:
+          type: number
+          format: double
+        longitud:
+          type: number
+          format: double
+        imagen:
+          type: string
+          format: uri
+          nullable: true
+        hora_apertura:
+          type: string
+          format: time
+          nullable: true
+        hora_cierre:
+          type: string
+          format: time
+          nullable: true
+        tipo_alojamiento:
+          type: integer
+          nullable: true
+        tipo_habitacion:
+          type: integer
+          nullable: true
+        precio:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        capacidad_personas:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        telefono:
+          type: string
+          maxLength: 20
+        sitio_web:
+          type: string
+          format: uri
+          maxLength: 200
+        rating_avg:
+          type: number
+          format: double
+          readOnly: true
+        rating_count:
+          type: integer
+          readOnly: true
+        es_destacado:
+          type: boolean
+        is_favorito:
+          type: string
+          readOnly: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+    PatchedConsejoMascota:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        tipo_entidad:
+          allOf:
+          - $ref: '#/components/schemas/TipoEntidadEnum'
+          writeOnly: true
+        id_entidad:
+          type: integer
+          writeOnly: true
+        texto:
+          type: string
+          maxLength: 500
+        idioma:
+          $ref: '#/components/schemas/IdiomaEnum'
+        activo:
+          type: boolean
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+    PatchedEnlaceRedSocial:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        red_social:
+          type: integer
+        url_perfil:
+          type: string
+          format: uri
+          maxLength: 200
+        tipo_entidad:
+          allOf:
+          - $ref: '#/components/schemas/TipoEntidadEnum'
+          writeOnly: true
+        id_entidad:
+          type: integer
+          writeOnly: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+    PatchedEvento:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nombre:
+          type: string
+          maxLength: 100
+        descripcion:
+          type: string
+        direccion:
+          type: string
+          maxLength: 200
+        latitud:
+          type: number
+          format: double
+        longitud:
+          type: number
+          format: double
+        imagen:
+          type: string
+          format: uri
+          nullable: true
+        fecha_inicio:
+          type: string
+          format: date-time
+        fecha_fin:
+          type: string
+          format: date-time
+        hora_apertura:
+          type: string
+          format: time
+          nullable: true
+        hora_cierre:
+          type: string
+          format: time
+          nullable: true
+        tipo_evento:
+          type: integer
+          nullable: true
+        precio:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        es_gratuito:
+          type: boolean
+        cupo_maximo:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+        rating_avg:
+          type: number
+          format: double
+          readOnly: true
+        rating_count:
+          type: integer
+          readOnly: true
+        es_destacado:
+          type: boolean
+        is_favorito:
+          type: string
+          readOnly: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+    PatchedFavorito:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        usuario:
+          type: integer
+          readOnly: true
+        tipo_entidad:
+          allOf:
+          - $ref: '#/components/schemas/TipoEntidadEnum'
+          writeOnly: true
+        id_entidad:
+          type: integer
+          writeOnly: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+    PatchedHistorialNavegacion:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        usuario:
+          type: integer
+          readOnly: true
+        tipo_entidad:
+          allOf:
+          - $ref: '#/components/schemas/TipoEntidadEnum'
+          writeOnly: true
+        id_entidad:
+          type: integer
+          writeOnly: true
+        visto_en:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+    PatchedLugarTuristico:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nombre:
+          type: string
+          maxLength: 100
+        descripcion:
+          type: string
+        direccion:
+          type: string
+          maxLength: 200
+        latitud:
+          type: number
+          format: double
+        longitud:
+          type: number
+          format: double
+        imagen:
+          type: string
+          format: uri
+          nullable: true
+        hora_apertura:
+          type: string
+          format: time
+          nullable: true
+        hora_cierre:
+          type: string
+          format: time
+          nullable: true
+        precio_entrada:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          nullable: true
+        telefono:
+          type: string
+          maxLength: 20
+        sitio_web:
+          type: string
+          format: uri
+          maxLength: 200
+        rating_avg:
+          type: number
+          format: double
+          readOnly: true
+        rating_count:
+          type: integer
+          readOnly: true
+        es_destacado:
+          type: boolean
+        tipo_lugar_turistico:
+          type: integer
+          nullable: true
+        imagenes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ImagenLugar'
+          readOnly: true
+        etiquetas:
+          type: array
+          items:
+            $ref: '#/components/schemas/EtiquetaLugar'
+          readOnly: true
+        is_favorito:
+          type: string
+          readOnly: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+    PatchedNoticia:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        titulo:
+          type: string
+          maxLength: 200
+        extracto:
+          type: string
+        cuerpo:
+          type: string
+        categoria:
+          $ref: '#/components/schemas/CategoriaEnum'
+        imagen:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        nivel_alerta:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/NivelAlertaEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        es_destacada:
+          type: boolean
+        publicado_en:
+          type: string
+          format: date-time
+          nullable: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+    PatchedRestaurante:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nombre:
+          type: string
+          maxLength: 100
+        descripcion:
+          type: string
+        direccion:
+          type: string
+          maxLength: 200
+        latitud:
+          type: number
+          format: double
+        longitud:
+          type: number
+          format: double
+        imagen:
+          type: string
+          format: uri
+          nullable: true
+        hora_apertura:
+          type: string
+          format: time
+          nullable: true
+        hora_cierre:
+          type: string
+          format: time
+          nullable: true
+        telefono:
+          type: string
+          maxLength: 20
+        sitio_web:
+          type: string
+          format: uri
+          maxLength: 200
+        rating_avg:
+          type: number
+          format: double
+          readOnly: true
+        rating_count:
+          type: integer
+          readOnly: true
+        es_destacado:
+          type: boolean
+        is_favorito:
+          type: string
+          readOnly: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+    PatchedUsuario:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        tipo_de_cuenta:
+          type: integer
+          readOnly: true
+          nullable: true
+        tipo_documento:
+          type: integer
+          nullable: true
+        identificacion:
+          type: string
+          nullable: true
+          maxLength: 100
+        correo:
+          type: string
+          format: email
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+        nombre:
+          type: string
+          nullable: true
+          maxLength: 100
+        apellido:
+          type: string
+          nullable: true
+          maxLength: 100
+        fecha_nacimiento:
+          type: string
+          format: date
+          nullable: true
+          title: Fecha de nacimiento
+        idioma:
+          type: integer
+          nullable: true
+        nacionalidad:
+          type: integer
+          nullable: true
+        avatar_url:
+          type: string
+          format: uri
+          maxLength: 200
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        is_active:
+          type: boolean
+          readOnly: true
+          title: Habilitado
+    PatchedValoracionComentario:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        usuario:
+          type: integer
+          readOnly: true
+          nullable: true
+        tipo_entidad:
+          allOf:
+          - $ref: '#/components/schemas/TipoEntidadEnum'
+          writeOnly: true
+        id_entidad:
+          type: integer
+          writeOnly: true
+        texto:
+          type: string
+        valoracion:
+          type: integer
+          maximum: 5
+          minimum: 1
+        interacciones:
+          type: integer
+          readOnly: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+    RedSocial:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nombre:
+          type: string
+          maxLength: 100
+        icono_url:
+          type: string
+          format: uri
+          maxLength: 200
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+      required:
+      - estado
+      - fecha_actualizacion
+      - fecha_creacion
+      - id
+      - nombre
+    Restaurante:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nombre:
+          type: string
+          maxLength: 100
+        descripcion:
+          type: string
+        direccion:
+          type: string
+          maxLength: 200
+        latitud:
+          type: number
+          format: double
+        longitud:
+          type: number
+          format: double
+        imagen:
+          type: string
+          format: uri
+          nullable: true
+        hora_apertura:
+          type: string
+          format: time
+          nullable: true
+        hora_cierre:
+          type: string
+          format: time
+          nullable: true
+        telefono:
+          type: string
+          maxLength: 20
+        sitio_web:
+          type: string
+          format: uri
+          maxLength: 200
+        rating_avg:
+          type: number
+          format: double
+          readOnly: true
+        rating_count:
+          type: integer
+          readOnly: true
+        es_destacado:
+          type: boolean
+        is_favorito:
+          type: string
+          readOnly: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+      required:
+      - direccion
+      - estado
+      - fecha_actualizacion
+      - fecha_creacion
+      - id
+      - is_favorito
+      - latitud
+      - longitud
+      - nombre
+      - rating_avg
+      - rating_count
+    TipoAlojamiento:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nombre:
+          type: string
+          maxLength: 100
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+      required:
+      - estado
+      - fecha_actualizacion
+      - fecha_creacion
+      - id
+      - nombre
+    TipoEntidadEnum:
+      enum:
+      - restaurante
+      - lugarturistico
+      - alojamiento
+      - evento
+      - noticia
+      type: string
+      description: |-
+        * `restaurante` - restaurante
+        * `lugarturistico` - lugarturistico
+        * `alojamiento` - alojamiento
+        * `evento` - evento
+        * `noticia` - noticia
+    TipoEvento:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nombre:
+          type: string
+          maxLength: 100
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+      required:
+      - estado
+      - fecha_actualizacion
+      - fecha_creacion
+      - id
+      - nombre
+    TipoHabitacion:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        nombre:
+          type: string
+          maxLength: 100
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+      required:
+      - estado
+      - fecha_actualizacion
+      - fecha_creacion
+      - id
+      - nombre
+    TokenBlacklist:
+      type: object
+      properties:
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - refresh
+    TokenObtainPair:
+      type: object
+      properties:
+        correo:
+          type: string
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          readOnly: true
+      required:
+      - access
+      - correo
+      - password
+      - refresh
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+          writeOnly: true
+      required:
+      - access
+      - refresh
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        tipo_de_cuenta:
+          type: integer
+          readOnly: true
+          nullable: true
+        tipo_documento:
+          type: integer
+          nullable: true
+        identificacion:
+          type: string
+          nullable: true
+          maxLength: 100
+        correo:
+          type: string
+          format: email
+          maxLength: 254
+        password:
+          type: string
+          writeOnly: true
+        nombre:
+          type: string
+          nullable: true
+          maxLength: 100
+        apellido:
+          type: string
+          nullable: true
+          maxLength: 100
+        fecha_nacimiento:
+          type: string
+          format: date
+          nullable: true
+          title: Fecha de nacimiento
+        idioma:
+          type: integer
+          nullable: true
+        nacionalidad:
+          type: integer
+          nullable: true
+        avatar_url:
+          type: string
+          format: uri
+          maxLength: 200
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        is_active:
+          type: boolean
+          readOnly: true
+          title: Habilitado
+      required:
+      - correo
+      - fecha_actualizacion
+      - fecha_creacion
+      - id
+      - is_active
+      - password
+      - tipo_de_cuenta
+    ValoracionComentario:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        usuario:
+          type: integer
+          readOnly: true
+          nullable: true
+        tipo_entidad:
+          allOf:
+          - $ref: '#/components/schemas/TipoEntidadEnum'
+          writeOnly: true
+        id_entidad:
+          type: integer
+          writeOnly: true
+        texto:
+          type: string
+        valoracion:
+          type: integer
+          maximum: 5
+          minimum: 1
+        interacciones:
+          type: integer
+          readOnly: true
+        fecha_creacion:
+          type: string
+          format: date-time
+          readOnly: true
+        fecha_actualizacion:
+          type: string
+          format: date-time
+          readOnly: true
+        estado:
+          type: boolean
+          readOnly: true
+      required:
+      - estado
+      - fecha_actualizacion
+      - fecha_creacion
+      - id
+      - id_entidad
+      - interacciones
+      - tipo_entidad
+      - usuario
+      - valoracion
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
