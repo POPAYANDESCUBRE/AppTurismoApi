@@ -15,6 +15,14 @@ env/
 db.sqlite3
 media/
 staticfiles/
+local_settings.py
+
+# Tests
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
 
 # Environment variables
 .env
@@ -32,10 +40,7 @@ staticfiles/
 # OS
 .DS_Store
 Thumbs.db
-
-# Archivos accidentales de curl
--H
--d
+desktop.ini
 
 # Secrets & Keys
 appturismo-key.json

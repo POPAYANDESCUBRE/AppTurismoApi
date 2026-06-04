@@ -1,20 +1,39 @@
 from .base import *
+from pathlib import Path
 
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+# SQLite para desarrollo local (fácil y sin configuración adicional)
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# Si prefieres PostgreSQL local, descomenta esto y comenta SQLite arriba:
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'turismoapp_db',
+#         'USER': 'postgres',
+#         'PASSWORD': '12345',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
+# Si prefieres MySQL local, descomenta esto y comenta SQLite y PostgreSQL arriba:
 DATABASES = {
     'default': {
-        'ENGINE': gcp_secrets_dict.get('DB_ENGINE', 'django.db.backends.postgresql'),
-        'NAME': gcp_secrets_dict.get('DB_NAME', 'postgres'),
-        'USER': gcp_secrets_dict.get('DB_USER', ''),
-        'PASSWORD': gcp_secrets_dict.get('DB_PASSWORD', ''),
-        'HOST': gcp_secrets_dict.get('DB_HOST', 'localhost'),
-        'PORT': gcp_secrets_dict.get('DB_PORT', '5432'),
-        'OPTIONS': {
-            'options': f"-c search_path={gcp_secrets_dict.get('DB_SCHEMA', 'public')}"
-        }
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'popayandescubre',
+        'USER': 'root',
+        'PASSWORD': '12345',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
