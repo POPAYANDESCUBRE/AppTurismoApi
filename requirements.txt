@@ -20,4 +20,4 @@ google-cloud-secret-manager
 gunicorn
 drf-spectacular
 whitenoise
-
+django-filter

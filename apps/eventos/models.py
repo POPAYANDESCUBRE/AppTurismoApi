@@ -30,6 +30,9 @@ class Evento(InformacionBase):
     precio = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     es_gratuito = models.BooleanField(default=False)
     cupo_maximo = models.PositiveIntegerField(null=True, blank=True)
+    rating_avg = models.FloatField(default=0)
+    rating_count = models.PositiveIntegerField(default=0)
+    es_destacado = models.BooleanField(default=False)
 
     # Relaciones genéricas (Inversas)
     redes_sociales = GenericRelation('gestiones.EnlaceRedSocial')

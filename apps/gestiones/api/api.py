@@ -1,161 +1,68 @@
-from django.db import transaction
-from django.contrib.contenttypes.models import ContentType
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
 from django.utils import timezone
-from .serializers import (
-    RedSocialSerializer,
-    EnlaceRedSocialSerializer,
-    ValoracionComentarioSerializer,
-    FavoritoSerializer,
-    MODEL_MAPPING
-)
-from apps.gestiones.models import (
-    RedSocial,
-    EnlaceRedSocial,
-    ValoracionComentario,
-    Favorito,
-)
+from apps.gestiones.models import Favorito, ValoracionComentario, RedSocial, EnlaceRedSocial
+from .serializers import FavoritoSerializer, ValoracionComentarioSerializer, RedSocialSerializer, EnlaceRedSocialSerializer
 
 
-class RedSocialViewset(viewsets.ModelViewSet):
+class RedSocialViewset(viewsets.ReadOnlyModelViewSet):
     queryset = RedSocial.objects.all()
     serializer_class = RedSocialSerializer
 
-    @transaction.atomic
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return Response({
-            "message": "Red Social creada.",
-            "created_data": serializer.data
-        }, status=status.HTTP_201_CREATED)
-
-    @transaction.atomic
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response({
-            "message": "Los datos han sido actualizados",
-            "updated_data": serializer.data
-        }, status=status.HTTP_200_OK)
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.estado = False
-        instance.eliminado_en = timezone.now()
-        instance.save()
-        return Response({
-            'status': 'success',
-            'message': 'Red Social ha sido Eliminada.'
-        }, status=status.HTTP_204_NO_CONTENT)
-
 
 class EnlaceRedSocialViewset(viewsets.ModelViewSet):
-    queryset = EnlaceRedSocial.objects.all().select_related('red_social', 'content_type')
+    queryset = EnlaceRedSocial.objects.all()
     serializer_class = EnlaceRedSocialSerializer
+    
+    def get_permissions(self):
+        return [permissions.IsAdminUser()]
 
-    def get_queryset(self):
-        qs = super().get_queryset()
-        tipo = self.request.query_params.get('tipo_entidad')
-        id_ent = self.request.query_params.get('id_entidad')
-        
-        if tipo in MODEL_MAPPING:
-            ct = ContentType.objects.get_for_model(MODEL_MAPPING[tipo])
-            qs = qs.filter(content_type=ct)
-        if id_ent:
-            qs = qs.filter(object_id=id_ent)
-            
-        return qs
-
-    @transaction.atomic
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
-
-    @transaction.atomic
-    def update(self, request, *args, **kwargs):
-        return super().update(request, *args, **kwargs)
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
+    def perform_destroy(self, instance):
         instance.estado = False
         instance.eliminado_en = timezone.now()
         instance.save()
-        return Response({'status': 'success', 'message': 'Eliminado.'}, status=status.HTTP_204_NO_CONTENT)
-
-
-class ValoracionComentarioViewset(viewsets.ModelViewSet):
-    queryset = ValoracionComentario.objects.all().select_related('usuario', 'content_type')
-    serializer_class = ValoracionComentarioSerializer
-
-    def get_queryset(self):
-        qs = super().get_queryset()
-        tipo = self.request.query_params.get('tipo_entidad')
-        id_ent = self.request.query_params.get('id_entidad')
-        
-        if tipo in MODEL_MAPPING:
-            ct = ContentType.objects.get_for_model(MODEL_MAPPING[tipo])
-            qs = qs.filter(content_type=ct)
-        if id_ent:
-            qs = qs.filter(object_id=id_ent)
-            
-        return qs
-
-    @transaction.atomic
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        return Response({
-            "message": "Valoración creada.",
-            "created_data": serializer.data
-        }, status=status.HTTP_201_CREATED)
-
-    @transaction.atomic
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response({
-            "message": "Los datos han sido actualizados",
-            "updated_data": serializer.data
-        }, status=status.HTTP_200_OK)
-
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
-        instance.estado = False
-        instance.eliminado_en = timezone.now()
-        instance.save()
-        return Response({
-            'status': 'success',
-            'message': 'La valoración ha sido Eliminada.'
-        }, status=status.HTTP_204_NO_CONTENT)
 
 
 class FavoritoViewset(viewsets.ModelViewSet):
-    queryset = Favorito.objects.all().select_related('usuario', 'content_type')
     serializer_class = FavoritoSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        qs = super().get_queryset()
-        usuario_id = self.request.query_params.get('usuario')
-        if usuario_id:
-            qs = qs.filter(usuario_id=usuario_id)
-        return qs
+        return Favorito.objects.filter(usuario=self.request.user, estado=True)
 
-    @transaction.atomic
     def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
+        # We need to map the incoming human readable content_type and object_id
+        # Our FavoritoSerializer handles this in validate() if we reuse the MODEL_MAPPING logic.
+        data = request.data.copy()
+        serializer = self.get_serializer(data=data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        
+        # Ensure user can only create for themselves
+        serializer.save(usuario=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    def destroy(self, request, *args, **kwargs):
-        instance = self.get_object()
+    def perform_destroy(self, instance):
         instance.estado = False
         instance.eliminado_en = timezone.now()
         instance.save()
-        return Response({'status': 'success', 'message': 'Favorito eliminado.'}, status=status.HTTP_204_NO_CONTENT)
+
+
+class ValoracionComentarioViewset(viewsets.ModelViewSet):
+    serializer_class = ValoracionComentarioSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Only return current user's own reviews
+        return ValoracionComentario.objects.filter(usuario=self.request.user, estado=True)
+
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+        serializer = self.get_serializer(data=data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save(usuario=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    def perform_destroy(self, instance):
+        instance.estado = False
+        instance.eliminado_en = timezone.now()
+        instance.save()

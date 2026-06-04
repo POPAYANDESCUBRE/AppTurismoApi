@@ -1,10 +1,9 @@
 from rest_framework import routers
-from .api import CategoriaMenuViewset, RestauranteViewset, PlatoViewset
+from .api import RestauranteViewset, CategoriaMenuViewset
 
 router = routers.DefaultRouter()
 
-router.register('api/categorias-menu', CategoriaMenuViewset, 'categorias_menu')
-router.register('api/restaurantes', RestauranteViewset, 'restaurantes')
-router.register('api/platos', PlatoViewset, 'platos')
+router.register('restaurantes/categorias-menu', CategoriaMenuViewset, 'categorias_menu')
+router.register('restaurantes', RestauranteViewset, 'restaurantes')
 
 urlpatterns = router.urls

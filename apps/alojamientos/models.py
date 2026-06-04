@@ -42,6 +42,9 @@ class Alojamiento(InformacionBase):
     capacidad_personas = models.PositiveIntegerField(null=True, blank=True)
     telefono = models.CharField(max_length=20, blank=True, default='')
     sitio_web = models.URLField(blank=True, default='')
+    rating_avg = models.FloatField(default=0)
+    rating_count = models.PositiveIntegerField(default=0)
+    es_destacado = models.BooleanField(default=False)
 
     # Relaciones genéricas (Inversas)
     redes_sociales = GenericRelation('gestiones.EnlaceRedSocial')

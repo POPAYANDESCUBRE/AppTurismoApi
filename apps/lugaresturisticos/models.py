@@ -28,6 +28,9 @@ class LugarTuristico(InformacionBase):
     precio_entrada = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     telefono = models.CharField(max_length=20, blank=True, default='')
     sitio_web = models.URLField(blank=True, default='')
+    rating_avg = models.FloatField(default=0)
+    rating_count = models.PositiveIntegerField(default=0)
+    es_destacado = models.BooleanField(default=False)
 
     # Relaciones genéricas (Inversas)
     redes_sociales = GenericRelation('gestiones.EnlaceRedSocial')
@@ -40,3 +43,34 @@ class LugarTuristico(InformacionBase):
         db_table = "lugaresturisticos.LugarTuristico"
         verbose_name = "LugarTuristico"
         verbose_name_plural = "LugaresTuristicos"
+
+
+class ImagenLugar(models.Model):
+    lugar = models.ForeignKey(LugarTuristico, on_delete=models.CASCADE, related_name='imagenes')
+    url = models.URLField()
+    orden = models.PositiveIntegerField(default=0)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.lugar.nombre} — imagen {self.orden}"
+
+    class Meta:
+        db_table = 'lugaresturisticos"."ImagenLugar'
+        verbose_name = "Imagen Lugar"
+        verbose_name_plural = "Imágenes Lugar"
+        ordering = ['orden']
+
+
+class EtiquetaLugar(models.Model):
+    lugar = models.ForeignKey(LugarTuristico, on_delete=models.CASCADE, related_name='etiquetas')
+    etiqueta = models.CharField(max_length=100)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.lugar.nombre} — {self.etiqueta}"
+
+    class Meta:
+        db_table = 'lugaresturisticos"."EtiquetaLugar'
+        verbose_name = "Etiqueta Lugar"
+        verbose_name_plural = "Etiquetas Lugar"
+        unique_together = ('lugar', 'etiqueta')

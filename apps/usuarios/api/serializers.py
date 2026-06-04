@@ -49,7 +49,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Usuario
-        fields = ['id', 'tipo_de_cuenta', 'tipo_documento', 'identificacion', 'correo', 'password', 'nombre', 'apellido', 'fecha_nacimiento', 'idioma', 'nacionalidad', 'fecha_creacion', 'fecha_actualizacion', 'is_active']
+        fields = ['id', 'tipo_de_cuenta', 'tipo_documento', 'identificacion', 'correo', 'password', 'nombre', 'apellido', 'fecha_nacimiento', 'idioma', 'nacionalidad', 'avatar_url', 'fecha_creacion', 'fecha_actualizacion', 'is_active']
         read_only_fields = ('tipo_de_cuenta', 'fecha_creacion', 'fecha_actualizacion', 'is_active')
         extra_kwargs = {
             'password': {'required': False},

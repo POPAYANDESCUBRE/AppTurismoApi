@@ -84,6 +84,7 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
     fecha_nacimiento = models.DateField("Fecha de nacimiento", null=True, blank=True)
     idioma = models.ForeignKey(Idioma, on_delete=models.SET_NULL, null=True, blank=True)
     nacionalidad = models.ForeignKey(Nacionalidad, on_delete=models.SET_NULL, null=True, blank=True)
+    avatar_url = models.URLField(blank=True, default='')
     fecha_creacion = models.DateTimeField(auto_now_add=True)
     fecha_actualizacion = models.DateTimeField(auto_now=True)
     eliminado_en = models.DateTimeField(null=True, blank=True)
