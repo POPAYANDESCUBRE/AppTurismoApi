@@ -1,3 +1,5 @@
+import os
+
 from .base import *
 from .gcp_secrets import get_secrets_from_gcp
 from django.core.exceptions import ImproperlyConfigured
@@ -5,8 +7,10 @@ from django.core.exceptions import ImproperlyConfigured
 # Obtener secrets de GCP
 gcp_secrets_dict = get_secrets_from_gcp()
 
-# SECRET_KEY - CRÍTICO: Sin fallback para forzar configuración correcta
-SECRET_KEY = gcp_secrets_dict.get('DJANGO_SECRET_KEY')
+# SECRET_KEY - se obtiene de GCP Secrets en runtime real. El fallback a la
+# variable de entorno solo cubre el paso `collectstatic` durante el build de
+# Docker, donde aún no hay credenciales de GCP disponibles.
+SECRET_KEY = gcp_secrets_dict.get('DJANGO_SECRET_KEY') or os.environ.get('DJANGO_SECRET_KEY')
 if not SECRET_KEY:
     raise ImproperlyConfigured("DJANGO_SECRET_KEY no configurado en GCP Secrets")
 

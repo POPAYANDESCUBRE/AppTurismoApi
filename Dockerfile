@@ -2,7 +2,8 @@
 FROM python:3.11-slim AS builder
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    DJANGO_SETTINGS_MODULE=core.settings.production
 
 WORKDIR /app
 
@@ -41,6 +42,7 @@ COPY --from=builder /app /app
 ENV PYTHONPATH=/usr/local/lib/python3.11/site-packages \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
+    DJANGO_SETTINGS_MODULE=core.settings.production \
     PORT=8080
 
 # Cloud Run injects $PORT. 
