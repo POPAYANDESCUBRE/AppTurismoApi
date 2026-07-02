@@ -3,11 +3,12 @@ from apps.noticias.models import Noticia
 
 
 class NoticiaSerializer(serializers.ModelSerializer):
+    contenido = serializers.CharField(source='cuerpo', read_only=True)
+    fecha_publicacion = serializers.DateTimeField(source='publicado_en', read_only=True)
+
     class Meta:
         model = Noticia
         fields = [
-            'id', 'titulo', 'extracto', 'cuerpo', 'categoria',
-            'imagen', 'nivel_alerta', 'es_destacada', 'publicado_en',
-            'fecha_creacion', 'fecha_actualizacion', 'estado',
+            'id', 'titulo', 'contenido', 'imagen', 'fecha_publicacion',
         ]
-        read_only_fields = ('fecha_creacion', 'fecha_actualizacion', 'estado')
+        read_only_fields = ('fecha_publicacion',)

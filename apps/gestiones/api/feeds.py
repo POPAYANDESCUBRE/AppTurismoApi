@@ -67,23 +67,38 @@ class ExplorarView(APIView):
         now = timezone.now()
         next_week = now + timedelta(days=7)
 
+        # Serializers importados
+        from apps.lugaresturisticos.api.serializers import LugarTuristicoSerializer
+        from apps.eventos.api.serializers import EventoSerializer
+        from apps.noticias.api.serializers import NoticiaSerializer
+        from apps.restaurantes.api.serializers import RestauranteSerializer
+        from apps.alojamientos.api.serializers import AlojamientoSerializer
+
+        # Lugares destacados (top 5 con mejor rating)
         lugares_destacados = LugarTuristico.objects.filter(estado=True, es_destacado=True).order_by('-rating_avg')[:5]
-        eventos_destacados = Evento.objects.filter(estado=True, es_destacado=True, fecha_inicio__gte=now).order_by('fecha_inicio')[:3]
-        restaurantes_destacados = Restaurante.objects.filter(estado=True, es_destacado=True).order_by('-rating_avg')[:3]
-        alojamientos_destacados = Alojamiento.objects.filter(estado=True, es_destacado=True).order_by('-rating_avg')[:3]
 
-        eventos_semana = Evento.objects.filter(estado=True, fecha_inicio__gte=now, fecha_inicio__lte=next_week).order_by('fecha_inicio')
+        # Eventos próximos (próxima semana + eventos destacados)
+        eventos_semana = Evento.objects.filter(
+            estado=True,
+            fecha_inicio__gte=now
+        ).order_by('fecha_inicio')[:5]
+
+        # Noticias recientes (últimas 3)
         noticias_recientes = Noticia.objects.filter(estado=True).order_by('-publicado_en', '-fecha_creacion')[:3]
+        
+        # Restaurantes destacados (top 5 con mejor rating)
+        restaurante_list = Restaurante.objects.filter(estado=True, es_destacado=True).order_by('-rating_avg')[:5]
+        
+        # Alojamientos destacados (top 5 con mejor rating)
+        alojamiento_list = Alojamiento.objects.filter(estado=True, es_destacado=True).order_by('-rating_avg')[:5]
 
+        # ESTRUCTURA SIMPLE QUE EL FRONTEND ESPERA
         return Response({
-            "destacados": {
-                "lugares": [get_compact_dict(o) for o in lugares_destacados],
-                "eventos": [get_compact_dict(o) for o in eventos_destacados],
-                "restaurantes": [get_compact_dict(o) for o in restaurantes_destacados],
-                "alojamientos": [get_compact_dict(o) for o in alojamientos_destacados],
-            },
-            "esta_semana": [get_compact_dict(o) for o in eventos_semana],
-            "noticias_recientes": [get_compact_dict(o) for o in noticias_recientes],
+            "destacados": LugarTuristicoSerializer(lugares_destacados, many=True).data,
+            "eventos": EventoSerializer(eventos_semana, many=True).data,
+            "noticias": NoticiaSerializer(noticias_recientes, many=True).data,
+            "restaurantes": RestauranteSerializer(restaurante_list, many=True).data,
+            "alojamientos": AlojamientoSerializer(alojamiento_list, many=True).data,
         })
 
 

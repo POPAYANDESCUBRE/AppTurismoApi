@@ -85,17 +85,29 @@ class ValoracionComentarioSerializer(serializers.ModelSerializer):
 
 
 class FavoritoSerializer(serializers.ModelSerializer):
+    #WRITE: Para crear favoritos
     tipo_entidad = serializers.ChoiceField(choices=list(MODEL_MAPPING.keys()), write_only=True)
     id_entidad = serializers.IntegerField(write_only=True)
+    
+    #Read: Para mostrar favoritos
+    tipo_entidad_display = serializers.SerializerMethodField(read_only=True)
+    id_entidad_display = serializers.IntegerField(source='object_id', read_only=True)
 
     class Meta:
         model = Favorito
         fields = [
-            'id', 'usuario', 'tipo_entidad', 'id_entidad',
+            'id', 'usuario', 'tipo_entidad', 'id_entidad', 'tipo_entidad_display', 'id_entidad_display',
             'fecha_creacion', 'fecha_actualizacion', 'estado',
         ]
         read_only_fields = ('usuario', 'fecha_creacion', 'fecha_actualizacion', 'estado')
 
+    def get_tipo_entidad_display(self, obj):
+        content_type = obj.content_type
+        for key, model_class in MODEL_MAPPING.items():
+            if content_type.model_class() == model_class:
+                return key
+        return None
+            
     def validate(self, data):
         tipo = data.get('tipo_entidad')
         id_ent = data.get('id_entidad')

@@ -31,8 +31,6 @@ class FavoritoViewset(viewsets.ModelViewSet):
         return Favorito.objects.filter(usuario=self.request.user, estado=True)
 
     def create(self, request, *args, **kwargs):
-        # We need to map the incoming human readable content_type and object_id
-        # Our FavoritoSerializer handles this in validate() if we reuse the MODEL_MAPPING logic.
         data = request.data.copy()
         serializer = self.get_serializer(data=data, context={'request': request})
         serializer.is_valid(raise_exception=True)
@@ -42,10 +40,7 @@ class FavoritoViewset(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def perform_destroy(self, instance):
-        instance.estado = False
-        instance.eliminado_en = timezone.now()
-        instance.save()
-
+        instance.delete()  # Hard delete
 
 class ValoracionComentarioViewset(viewsets.ModelViewSet):
     serializer_class = ValoracionComentarioSerializer

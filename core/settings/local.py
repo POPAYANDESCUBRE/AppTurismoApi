@@ -57,3 +57,5 @@ def set_search_path(sender, connection, **kwargs):
         schema = gcp_secrets_dict.get('DB_SCHEMA', 'public')
         with connection.cursor() as cursor:
             cursor.execute(f"SET search_path TO {schema}, public;")
+
+CORS_ALLOW_ALL_ORIGINS = True

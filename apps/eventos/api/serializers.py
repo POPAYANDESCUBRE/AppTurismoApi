@@ -17,24 +17,22 @@ class TipoEventoSerializer(serializers.ModelSerializer):
 
 
 class EventoSerializer(serializers.ModelSerializer):
-    is_favorito = serializers.SerializerMethodField()
+    tipo = serializers.SerializerMethodField()
+    promedio_valoracion = serializers.FloatField(source='rating_avg', read_only=True)
+    lugar = serializers.CharField(source='direccion', read_only=True)
 
     class Meta:
         model = Evento
         fields = [
-            'id', 'nombre', 'descripcion', 'direccion', 'latitud', 'longitud',
-            'imagen', 'fecha_inicio', 'fecha_fin', 'hora_apertura', 'hora_cierre',
-            'tipo_evento', 'precio', 'es_gratuito', 'cupo_maximo',
-            'rating_avg', 'rating_count', 'es_destacado', 'is_favorito',
-            'fecha_creacion', 'fecha_actualizacion', 'estado',
+            'id', 'nombre', 'descripcion', 'tipo', 'fecha_inicio', 'fecha_fin',
+            'imagen', 'lugar', 'promedio_valoracion',
         ]
-        read_only_fields = ('fecha_creacion', 'fecha_actualizacion', 'estado', 'rating_avg', 'rating_count')
+        read_only_fields = ('promedio_valoracion', 'lugar')
 
-    def get_is_favorito(self, obj):
-        request = self.context.get('request')
-        if request and request.user.is_authenticated:
-            from django.contrib.contenttypes.models import ContentType
-            from apps.gestiones.models import Favorito
-            ct = ContentType.objects.get_for_model(obj)
-            return Favorito.objects.filter(usuario=request.user, content_type=ct, object_id=obj.id).exists()
-        return False
+    def get_tipo(self, obj):
+        if obj.tipo_evento:
+            return {
+                'id': obj.tipo_evento.id,
+                'nombre': obj.tipo_evento.nombre
+            }
+        return None
