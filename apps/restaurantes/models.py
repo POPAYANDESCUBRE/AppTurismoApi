@@ -15,8 +15,31 @@ class CategoriaMenu(InformacionBase):
         verbose_name_plural = "Categorias Menu"
 
 
+class TipoRestaurante(InformacionBase):
+    """
+    Tipos de restaurantes: Heritage Dining, Casual Dining, Fast Food, etc.
+    """
+    nombre = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.nombre
+
+    class Meta:
+        db_table = "restaurantes.TipoRestaurante"
+        verbose_name = "Tipo de Restaurante"
+        verbose_name_plural = "Tipos de Restaurantes"
+        ordering = ['nombre']
+
+
 class Restaurante(InformacionBase):
     nombre = models.CharField(max_length=100, unique=True)
+    tipo_restaurante = models.ForeignKey(
+        TipoRestaurante,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='restaurantes'
+    )
     descripcion = models.TextField(blank=True, default='')
     direccion = models.CharField(max_length=200)
     latitud = models.FloatField()

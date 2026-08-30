@@ -58,13 +58,25 @@ class EventoViewset(viewsets.ModelViewSet):
             return Response(serializer.data)
             
         elif request.method == 'POST':
-            if ValoracionComentario.objects.filter(content_type=ct, object_id=evento.id, usuario=request.user, estado=True).exists():
-                return Response({"detail": "Ya has valorado este evento."}, status=status.HTTP_400_BAD_REQUEST)
-                
             data = request.data.copy()
             data['tipo_entidad'] = 'evento'
             data['id_entidad'] = evento.id
-            
+
+            # Si es un "like" (valoracion=5 y sin texto), verificar que no exista otro like del usuario
+            if data.get('valoracion') == 5 and not data.get('texto'):
+                if ValoracionComentario.objects.filter(
+                    content_type=ct,
+                    object_id=evento.id,
+                    usuario=request.user,
+                    valoracion=5,
+                    texto__isnull=True,
+                    estado=True
+                ).exists():
+                    return Response({"detail": "Ya has dado 'Me gusta' a este evento."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Si es un comentario (con texto), permitir múltiples comentarios
+            # No hay restricción
+
             serializer = ValoracionComentarioSerializer(data=data, context={'request': request})
             serializer.is_valid(raise_exception=True)
             serializer.save(usuario=request.user)

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.restaurantes.models import CategoriaMenu, Restaurante, Plato
+from apps.restaurantes.models import CategoriaMenu, Restaurante, Plato, TipoRestaurante
 
 
 class CategoriaMenuSerializer(serializers.ModelSerializer):
@@ -9,13 +9,21 @@ class CategoriaMenuSerializer(serializers.ModelSerializer):
         read_only_fields = ('fecha_creacion', 'fecha_actualizacion', 'estado')
 
 
+class TipoRestauranteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TipoRestaurante
+        fields = ['id', 'nombre']
+        read_only_fields = ['id']
+
+
 class RestauranteSerializer(serializers.ModelSerializer):
     is_favorito = serializers.SerializerMethodField()
+    tipo_restaurante = TipoRestauranteSerializer(read_only=True)
 
     class Meta:
         model = Restaurante
         fields = [
-            'id', 'nombre', 'descripcion', 'direccion', 'latitud', 'longitud',
+            'id', 'nombre', 'tipo_restaurante', 'descripcion', 'direccion', 'latitud', 'longitud',
             'imagen', 'hora_apertura', 'hora_cierre', 'telefono', 'sitio_web',
             'rating_avg', 'rating_count', 'es_destacado', 'is_favorito',
             'fecha_creacion', 'fecha_actualizacion', 'estado',

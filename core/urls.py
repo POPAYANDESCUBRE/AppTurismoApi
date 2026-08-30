@@ -6,7 +6,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
+
     # API v1 routes
     path('api/v1/', include('apps.usuarios.api.urls')),
     path('api/v1/', include('apps.lugaresturisticos.api.urls')),
@@ -17,6 +17,7 @@ urlpatterns = [
     path('api/v1/', include('apps.gestiones.api.urls')),
     path('api/v1/', include('apps.mascota.api.urls')),
     path('api/v1/', include('apps.historial.api.urls')),
+    path('api/v1/', include('apps.notificaciones.api.urls')),
 
     # API Documentation
     path('api/docs/schema/', SpectacularAPIView.as_view(), name='schema'),

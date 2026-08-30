@@ -1,5 +1,7 @@
 from .base import *
 from pathlib import Path
+from django.db.backends.signals import connection_created
+from django.dispatch import receiver
 
 DEBUG = True
 
@@ -48,8 +50,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST_PASSWORD = 'tu_contraseña_de_aplicación'
 # DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-from django.db.backends.signals import connection_created
-from django.dispatch import receiver
 
 @receiver(connection_created)
 def set_search_path(sender, connection, **kwargs):
