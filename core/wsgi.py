@@ -11,6 +11,10 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings.local')
+# Detectar si estamos en Railway
+if os.environ.get('RAILWAY_ENVIRONMENT'):
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings.railway')
+else:
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings.local')
 
 application = get_wsgi_application()
