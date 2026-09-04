@@ -20,13 +20,24 @@ ALLOWED_HOSTS = [
 ]
 
 # Database - Railway proporciona DATABASE_URL automáticamente
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
-        conn_max_age=600,
-        conn_health_checks=True,
-    )
-}
+# Durante el build, usar SQLite temporal
+database_url = os.environ.get('DATABASE_URL')
+if database_url:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=database_url,
+            conn_max_age=600,
+            conn_health_checks=True,
+        )
+    }
+else:
+    # Fallback a SQLite para build/collectstatic
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': '/tmp/build.db',
+        }
+    }
 
 # CORS para producción
 CORS_ALLOWED_ORIGINS = [
