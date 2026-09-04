@@ -1,8 +1,8 @@
 # Stage 1: Builder
-FROM python:3.11-slim AS builder
+FROM python:3.12-slim AS builder
 
 # Build args for flexibility
-ARG DJANGO_SETTINGS_MODULE=core.settings.production
+ARG DJANGO_SETTINGS_MODULE=core.settings.railway
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -42,7 +42,7 @@ COPY --from=builder /usr/local /usr/local
 COPY --from=builder /app /app
 
 # Set environment variables (can be overridden by Railway/GCP)
-ENV PYTHONPATH=/usr/local/lib/python3.11/site-packages \
+ENV PYTHONPATH=/usr/local/lib/python3.12/site-packages \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PORT=8080
