@@ -21,8 +21,10 @@ ALLOWED_HOSTS = [
 
 # Database - Railway proporciona DATABASE_URL automáticamente
 # Durante el build, usar SQLite temporal
-database_url = os.environ.get('DATABASE_URL')
-if database_url:
+database_url = os.environ.get('DATABASE_URL', '')
+
+# Solo usar PostgreSQL si DATABASE_URL empieza con postgresql://
+if database_url.startswith('postgresql://') or database_url.startswith('postgres://'):
     DATABASES = {
         'default': dj_database_url.config(
             default=database_url,
@@ -31,7 +33,7 @@ if database_url:
         )
     }
 else:
-    # Fallback a SQLite para build/collectstatic
+    # Fallback a SQLite para build/collectstatic o cuando no hay DATABASE_URL
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
