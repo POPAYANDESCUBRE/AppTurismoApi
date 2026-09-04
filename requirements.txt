@@ -21,3 +21,4 @@ gunicorn
 drf-spectacular
 whitenoise
 django-filter
+dj-database-url
