@@ -4,5 +4,10 @@ nixPkgs = ["python312"]
 [phases.install]
 cmds = ["pip install -r requirements.txt"]
 
+[phases.build]
+cmds = [
+  "DJANGO_SECRET_KEY=build-time-secret DATABASE_URL=sqlite:///tmp/build.db python manage.py collectstatic --noinput"
+]
+
 [start]
-cmd = "gunicorn core.wsgi:application --bind 0.0.0.0:$PORT"
+cmd = "gunicorn core.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120"
