@@ -25,7 +25,9 @@ RUN pip install --upgrade pip --no-cache-dir \
 COPY . .
 
 # Recolectar archivos estáticos
+# Usar una base de datos SQLite temporal para evitar requerir PostgreSQL durante el build
 RUN DJANGO_SECRET_KEY=build-time-secret \
+    DATABASE_URL=sqlite:///tmp/build.db \
     python manage.py collectstatic --noinput
 
 # Exponer el puerto (Railway usa la variable $PORT)
