@@ -34,5 +34,5 @@ RUN DJANGO_SECRET_KEY=build-time-secret \
 EXPOSE 8080
 
 # Comando para iniciar la aplicación
-# Railway inyectará la variable $PORT dinámicamente
-CMD gunicorn --bind 0.0.0.0:${PORT:-8080} --workers 2 --threads 4 --timeout 120 core.wsgi:application
+# Usar sh -c para que Railway pueda expandir la variable $PORT
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-8080} --workers 2 --threads 4 --timeout 120 core.wsgi:application"]
