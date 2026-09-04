@@ -4,7 +4,8 @@ FROM python:3.12-slim
 # Variables de entorno
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PORT=8080
+    PORT=8080 \
+    DJANGO_SETTINGS_MODULE=core.settings.railway
 
 WORKDIR /app
 
