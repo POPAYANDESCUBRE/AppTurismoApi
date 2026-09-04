@@ -1,9 +1,12 @@
 # Stage 1: Builder
 FROM python:3.11-slim AS builder
 
+# Build args for flexibility
+ARG DJANGO_SETTINGS_MODULE=core.settings.production
+
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    DJANGO_SETTINGS_MODULE=core.settings.production
+    DJANGO_SETTINGS_MODULE=${DJANGO_SETTINGS_MODULE}
 
 WORKDIR /app
 
@@ -38,12 +41,12 @@ COPY --from=builder /usr/local /usr/local
 # Copy the application source (including the collected staticfiles)
 COPY --from=builder /app /app
 
-# Set environment variables
+# Set environment variables (can be overridden by Railway/GCP)
 ENV PYTHONPATH=/usr/local/lib/python3.11/site-packages \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
-    DJANGO_SETTINGS_MODULE=core.settings.production \
     PORT=8080
 
-# Cloud Run injects $PORT. 
-CMD ["/usr/local/bin/gunicorn", "--bind", ":8080", "--workers", "1", "--threads", "8", "--timeout", "0", "core.wsgi:application"]
+# Use shell form to allow $PORT variable expansion
+# Railway/Cloud Run will inject $PORT dynamically
+CMD gunicorn --bind :${PORT:-8080} --workers 1 --threads 8 --timeout 0 core.wsgi:application

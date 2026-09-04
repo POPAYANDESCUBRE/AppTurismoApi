@@ -1,11 +1,9 @@
 {
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
-    "builder": "NIXPACKS",
-    "buildCommand": "pip install -r requirements.txt"
+    "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "gunicorn core.wsgi:application",
     "healthcheckPath": "/api/v1/",
     "healthcheckTimeout": 300,
     "restartPolicyType": "ON_FAILURE",
