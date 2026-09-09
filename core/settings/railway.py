@@ -47,6 +47,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:8080",
 ]
 
+# CSRF - agrega el dominio publico de Railway al heredado de base.py
+railway_public_domain = os.environ.get('RAILWAY_PUBLIC_DOMAIN', '')
+if railway_public_domain:
+    CSRF_TRUSTED_ORIGINS = CSRF_TRUSTED_ORIGINS + [f"https://{railway_public_domain}"]
+
 # Para apps móviles nativas (Android/iOS)
 CORS_ALLOW_ALL_ORIGINS = True  # Apps móviles no envían Origin header estándar
 
@@ -78,6 +83,11 @@ LOGGING = {
         },
     },
 }
+
+# Railway termina TLS en su proxy y reenvia por HTTP interno con este header;
+# sin esto, request.is_secure() siempre es False y SECURE_SSL_REDIRECT causa
+# un bucle infinito de redirects.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Security settings for production
 if not DEBUG:
