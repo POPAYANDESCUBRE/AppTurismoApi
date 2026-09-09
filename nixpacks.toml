@@ -13,4 +13,4 @@ cmds = [
 # cuando las variables de entorno estén disponibles
 
 [start]
-cmd = "gunicorn core.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120"
+cmd = "python -m gunicorn core.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120"
